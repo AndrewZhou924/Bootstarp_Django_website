@@ -4,7 +4,14 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 # 引入信号接收器的装饰器
 from django.dispatch import receiver
+import os
 
+# 设置头像的上传路径，以免发生文件命名冲突
+# 每个用户的头像文件命名为 [username].jpg
+BASE_DIR   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/avatar/')
+def upload_to(instance, fielname):
+    return '/'.join([MEDIA_ROOT, instance.user.username])
 
 # 用户扩展信息
 class Profile(models.Model):
@@ -13,7 +20,9 @@ class Profile(models.Model):
     # 电话号码字段
     phone = models.CharField(max_length=20, blank=True)
     # 头像
-    avatar = models.ImageField(upload_to='avatar/%Y%m%d/', blank=True)
+#     avatar = models.ImageField(upload_to='avatar/%Y%m%d/', blank=True)
+    avatar = models.ImageField(upload_to=upload_to, blank=True)
+
     # 个人简介
     bio = models.TextField(max_length=500, blank=True)
 

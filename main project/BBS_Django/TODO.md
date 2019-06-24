@@ -6,10 +6,11 @@ modify structure
 
 bug fix
 - comment显示第一行总有一个多的空格 【小bug】
+- 个人信息编辑模块头像不能显示 【本地有文件，大bug】
 
 add functions
 - 首页显示markdown编辑后的文章概要
 - 编辑文章新增catagory选项
-- 点赞功能
+- 点赞功能 【数据库已经更新】
 - 文章上传图片
-- 
+- 评论区显示用户头像

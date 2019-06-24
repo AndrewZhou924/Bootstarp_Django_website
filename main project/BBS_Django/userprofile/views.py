@@ -8,12 +8,6 @@ from .forms import ProfileFrom
 from .models import Profile
 from django.contrib import messages
 
-def hash_code(s, salt='mysite'):# 加点盐
-    h = hashlib.sha256()
-    s += salt
-    h.update(s.encode())  # update方法只接收bytes类型
-    return h.hexdigest()
-
 def user_login(request):
     # 点击登录
     if request.method == 'POST':
@@ -26,6 +20,12 @@ def user_login(request):
             user = authenticate(username=data['username'], password=data['password'])
             if user:
                 login(request, user)
+
+                # 增加sesson去保存一些用户信息
+                request.session['is_login'] = True
+                request.session['user_id'] = user.id
+                request.session['user_name'] = user.username
+
                 return redirect("article:article_list")
                 # return render(request, 'userprofile/login.html', locals())
             else:
@@ -47,9 +47,10 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
+    request.session.flush()
+    
     # 重定向到登录界面
-    user_login_form = UserLoginForm()
-    return render(request, 'userprofile/login.html', locals())
+    return redirect("userprofile:login")
 
 def user_register(request):
     if request.method =='POST':
@@ -97,8 +98,10 @@ def profile_edit(request, id):
             profile_cd = profile_form.cleaned_data
             profile.phone = profile_cd['phone']
             profile.bio = profile_cd['bio']
+
             if 'avatar' in request.FILES:
                 profile.avatar = profile_cd["avatar"]
+
             profile.save()
             messages.info(request,"信息更新成功")
             return redirect("userprofile:edit",id=id)
