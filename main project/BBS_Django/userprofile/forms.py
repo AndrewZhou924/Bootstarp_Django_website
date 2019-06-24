@@ -14,6 +14,8 @@ class UserRegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email')
+
+
     def clean_password2(self):
         data = self.cleaned_data
         if data.get('password') == data.get('password2'):

@@ -25,7 +25,6 @@ def user_login(request):
                 request.session['is_login'] = True
                 request.session['user_id'] = user.id
                 request.session['user_name'] = user.username
-                request.session['user'] = user
 
                 return redirect("article:article_list")
                 # return render(request, 'userprofile/login.html', locals())

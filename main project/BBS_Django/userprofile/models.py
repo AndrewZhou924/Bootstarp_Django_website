@@ -26,6 +26,9 @@ class Profile(models.Model):
     # 个人简介
     bio = models.TextField(max_length=500, blank=True)
 
+    # 大学信息
+    university = models.TextField(max_length=100, default='')
+
     def __str__(self):
         return 'user {}'.format(self.user.username)
 

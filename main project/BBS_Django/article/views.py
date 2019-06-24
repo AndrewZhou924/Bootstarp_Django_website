@@ -51,6 +51,45 @@ def article_list(request):
     context = {'articles':articles, 'order':order,}
     return render(request,'article/list.html',context)
 
+# 个人主页：列表页  --翻页
+# id - user_id
+# TODO test this function
+def personal_article_list(request, id):
+    search  = request.GET.get('search')
+    order = request.GET.get('order')
+    user = User.objects.get(id=id)
+    user_name = user.username
+    
+    # 如果是搜索模式
+    if search:
+        # 排序方式是“最热”
+        if order == 'total_views':
+            article_list = ArticlePost.objects.filter(
+                Q(title__icontains=search)|
+                Q(body__icontains=search)
+            ).order_by('-total_views')
+        else: # 排序方式是“最新”
+            article_list = ArticlePost.objects.filter(
+                Q(title__icontains=search)|
+                Q(body__icontains=search)
+            )
+    else: # 不是搜索模式，即显示所有文章
+        search = ""
+        if order == 'total_views':
+            article_list = ArticlePost.objects.filter(Q(author__username=user_name)).order_by('-total_views')
+        else:
+            article_list = ArticlePost.objects.filter(Q(author__username=user_name))
+
+    pagintor = Paginator(article_list,3)
+    # 获取页码
+    page = request.GET.get('page')
+    # 页码内容反个 articles
+    articles = pagintor.get_page(page)
+
+    # TODO 增加一个新的html模板
+    return render(request,'article/list.html',context)
+
+
 # TODO test this function
 def article_addLikes(request, id):
     article = ArticlePost.objects.get(id=id)
@@ -100,6 +139,9 @@ def article_create(request):
             user_profile = Profile.objects.get(user = request.user)
             new_article.author_avator = user_profile.avatar
 
+            # TODO test upload picture
+
+
             new_article.save()
             # 返回文章列表
             return redirect("article:article_list")
@@ -116,53 +158,6 @@ def article_create(request):
         context = {'article_post_form': article_post_from}
         # 返回模板
         return render(request, 'article/create.html',context)
-
-# just for test
-# ==================================================================
-# 创建文章，前提是必须已经登录
-# @login_required(login_url='/userprofile/login/')
-# def article_create(request, id):  # 注意这里要传进去id
-#     # 判断用户是否提交空数据
-#     if request.method == "POST":
-    
-#         # 将提交的数据复制到表单
-#         article_post_from = ArticlePostForm(data=request.POST)
-#         # 判断提交的数据是否满足模型要求
-#         if article_post_from.is_valid():
-#             # 保存数据但不提交到数据库
-#             new_article = article_post_from.save(commit=False)
-#             # 指定数据库中 id 为1的用户为作者
-#             # 如果你进行过删除数据表的操作，可能会找不到id=1的用户
-#             # 此时请重新创建用户，并传入此用户的id
-#             new_article.author = User.objects.get(id=request.user.id)
-#             # 将文章保存到数据库
-
-#             # TODO get user avatar
-#             # 拿到用户的头像
-#             # profile = Profile.objects.get(user_id=id)
-#             # new_article.avatar = profile.avatar
-
-#             new_article.save()
-#             # 返回文章列表
-#             return redirect("article:article_list")
-#         else:
-#             messages.error(request, "表单内容有误，请重新填写！")
-#             return render(request, 'article/create.html')
-#             # article_post_form = ArticlePostForm()
-#             # context = {'article_post_form': article_post_form}
-#             # return HttpResponse("表单内容有误，请重新填写！")
-#     else:
-#         # 创建表单类实例
-#         article_post_from = ArticlePostForm()
-#         # 赋值上下文
-#         context = {'article_post_form': article_post_from}
-#         # 返回模板
-#         return render(request, 'article/create.html',context)
-# just for test
-# ==================================================================
-
-
-
 
 # 删除文章，前提是必须已经登录
 @login_required(login_url='/userprofile/login/')
