@@ -16,6 +16,7 @@ class Comment(models.Model):
     )
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
+    user_avatar = models.ImageField(default="")
     
     class Meta:
         ordering = ('created',)

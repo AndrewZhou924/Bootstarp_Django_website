@@ -4,6 +4,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
+import os
+
+# 设置头像的上传路径，以免发生文件命名冲突
+# 每个用户的头像文件命名为 [username].jpg
+BASE_DIR   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/articleContent/')
+def upload_to(instance, fielname):
+    return '/'.join([MEDIA_ROOT, instance.user.username, '%Y%m%d'])
 
 class ArticlePost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -16,11 +24,10 @@ class ArticlePost(models.Model):
     total_views = models.PositiveIntegerField(default=0)
     likes  = models.PositiveIntegerField(default=0)
 
-    # TODO
-    # catagory = models.CharField(max_length=100)
-    # content_img = models.ImageField(upload_to='uploadPictures/%Y%m%d/')
-    # author_avator = models.ImageField()
-    # author_avator_url is better?
+    # 新的属性
+    catagory = models.CharField(max_length=100,default='')
+    content_img = models.ImageField(upload_to=upload_to,default='')
+    author_avatar = models.ImageField(default='')
 
     class Meta:
         ordering = ('-created',)

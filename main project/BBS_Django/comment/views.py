@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 from article.models import ArticlePost
+from userprofile.models import Profile
 from .forms import CommentForm
 
 # 文章评论
@@ -17,6 +18,11 @@ def post_comment(request, article_id):
             new_comment = comment_form.save(commit=False)
             new_comment.article = article
             new_comment.user = request.user
+
+            # 根据user找到Profile，从而拿到头像url
+            user_profile = Profile.objects.get(user = request.user)
+            new_comment.user_avatar = user_profile.avatar
+
             new_comment.save()
             return redirect(article)
         else:

@@ -14,6 +14,7 @@ from userprofile.models import Profile
 from django.core.paginator import Paginator
 from django.db.models import Q
 from comment.models import Comment
+from userprofile.models import Profile
 
 # 列表页  --翻页
 def article_list(request):
@@ -95,6 +96,9 @@ def article_create(request):
             # 将文章保存到数据库
 
             # TODO get user avatar
+            user = request.session.get('user', None)
+            user_profile = Profile.objects.get(user = request.user)
+            new_article.author_avator = user_profile.avatar
 
             new_article.save()
             # 返回文章列表
