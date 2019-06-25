@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 import os
+from DjangoUeditor.models import UEditorField
 
 # 设置头像的上传路径，以免发生文件命名冲突
 # 每个用户的头像文件命名为 [username].jpg
@@ -16,7 +17,12 @@ def upload_to(instance, fielname):
 class ArticlePost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    body = models.TextField()
+
+    # body = models.TextField()
+    body = UEditorField(width=600, height=300, toolbars="full", imagePath="images/", filePath="files/",
+                           upload_settings={"imageMaxSize": 1204000},
+                           settings={}, verbose_name='内容')
+
     created = models.DateTimeField(default=timezone.now)
     update = models.DateTimeField(auto_now=True)
 

@@ -9,7 +9,6 @@ modify structure
 bug fix
 
 - comment显示第一行总有一个多的空格 【小bug】
-
 - 个人信息编辑模块头像不能显示 【本地有文件，大bug】
 
   

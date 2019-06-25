@@ -117,6 +117,14 @@ def article_detail(request, id):
 
     return render(request, 'article/detail.html', context)
     
+
+from django.forms import forms
+# from DjangoUeditor.models import UEditorField
+from DjangoUeditor.forms import UEditorField
+class TestUEditorForm(forms.Form):
+    content = UEditorField('内容', width=600, height=300, toolbars="full", imagePath="images/", filePath="files/",
+                           upload_settings={"imageMaxSize": 1204000},
+                           settings={})
 # 创建文章，前提是必须已经登录
 @login_required(login_url='/userprofile/login/')
 def article_create(request):
@@ -151,13 +159,18 @@ def article_create(request):
             # article_post_form = ArticlePostForm()
             # context = {'article_post_form': article_post_form}
             # return HttpResponse("表单内容有误，请重新填写！")
+
     else:
         # 创建表单类实例
+        
+        # # 赋值上下文
+        # context = {'article_post_form': article_post_from}
+        # # 返回模板
+        # return render(request, 'article/create.html',context)
+
+        # article_post_from = TestUEditorForm()
         article_post_from = ArticlePostForm()
-        # 赋值上下文
-        context = {'article_post_form': article_post_from}
-        # 返回模板
-        return render(request, 'article/create.html',context)
+        return render(request, 'article/create.html', {'form': article_post_from})
 
 # 删除文章，前提是必须已经登录
 @login_required(login_url='/userprofile/login/')

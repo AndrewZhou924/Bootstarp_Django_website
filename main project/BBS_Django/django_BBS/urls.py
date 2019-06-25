@@ -23,6 +23,7 @@ from article import views
 from article.views import  article_list
 urlpatterns = [
     url(r'^$',views.article_list),
+    url(r'^ueditor/',include('DjangoUeditor.urls' )),
     path('admin/', admin.site.urls),
     path('article/', include('article.urls', namespace='article')),
     path('userprofile/', include('userprofile.urls', namespace='userprofile')),
