@@ -6,9 +6,8 @@ class ArticlePostForm(forms.ModelForm):
     class Meta:
         model = ArticlePost
         
-        # TODO 
+        # TODO 增加文章分类
         # fields = ('title', 'body', 'catagory')
-        # fields = ('title', 'body', 'content_img')
         fields = ('title', 'body')
 
         

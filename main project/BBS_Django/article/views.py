@@ -16,11 +16,63 @@ from django.db.models import Q
 from comment.models import Comment
 from userprofile.models import Profile
 
+# TODO test this function
+# 下拉加载更多
+def article_list_getMore(search, order, bias, user_id):
+    # 如果是搜索模式
+    if search:
+        # 排序方式是“最热”
+        if order == 'total_views':
+            article_list = ArticlePost.objects.filter(
+                Q(title__icontains=search)|
+                Q(body__icontains=search)
+            ).order_by('-total_views')
+        else: # 排序方式是“最新”
+            article_list = ArticlePost.objects.filter(
+                Q(title__icontains=search)|
+                Q(body__icontains=search)
+            )
+    else: 
+        if user_id >= 0:
+            user = User.objects.get(id=id)
+            user_name = user.username
+            if order == 'total_views':
+                article_list = ArticlePost.objects.filter(Q(author__username=user_name)).order_by('-total_views')
+            else:
+                article_list = ArticlePost.objects.filter(Q(author__username=user_name))
+        else:
+            if order == 'total_views':
+                article_list = ArticlePost.objects.all().order_by('-total_views')
+            else:
+                article_list = ArticlePost.objects.all()
+
+    # 目前设置每一页有3篇文章
+    pagintor = Paginator(article_list,3)
+    # 页码内容反个 articles
+    articles = pagintor.get_page(bias)
+    context = {'articles':articles, 'order':order,}
+
+    response = HttpResponse(context)
+    return response
+
+
 # 列表页  --翻页
 def article_list(request):
     search  = request.GET.get('search')
     order = request.GET.get('order')
+
+    # 下拉加载更多
+    bias = request.GET.get('bias')
+    if bias and (bias>0):
+            result = article_list_getMore(search, order, bias, user_id=-1)
+            return result
     
+    # 点赞 （增加点赞数）
+    likes = request.GET.get('likes')
+    article_id = request.GET.get('article_id')
+    if likes and article_id:
+        article_addLikes(article_id)
+
     # 如果是搜索模式
     if search:
         # 排序方式是“最热”
@@ -41,19 +93,18 @@ def article_list(request):
         else:
             article_list = ArticlePost.objects.all()
 
+    # 目前设置每一页有3篇文章
     pagintor = Paginator(article_list,3)
     # 获取页码
     page = request.GET.get('page')
     # 页码内容反个 articles
     articles = pagintor.get_page(page)
 
-    # TODO 增加md格式支持
     context = {'articles':articles, 'order':order,}
     return render(request,'article/list.html',context)
 
 # 个人主页：列表页  --翻页
 # id - user_id
-# TODO test this function
 def personal_article_list(request, id):
     search  = request.GET.get('search')
     order = request.GET.get('order')
@@ -87,16 +138,17 @@ def personal_article_list(request, id):
     articles = pagintor.get_page(page)
 
     # TODO 增加一个新的html模板
+    context = {'articles':articles, 'order':order,}
     return render(request,'article/list.html',context)
 
-
 # TODO test this function
-def article_addLikes(request, id):
+def article_addLikes(id):
     article = ArticlePost.objects.get(id=id)
     article.likes += 1
     article.save(update_fields=['likes'])
 
 # 点进去阅读文章内容，支持markdown格式显示
+# id是user_id
 def article_detail(request, id):
     article = ArticlePost.objects.get(id=id)
     comments = Comment.objects.filter(article=id)
@@ -114,17 +166,8 @@ def article_detail(request, id):
 
     # 新增了md.toc对象
     context = {'article': article, 'toc': md.toc, 'comments':comments}
-
     return render(request, 'article/detail.html', context)
     
-
-from django.forms import forms
-# from DjangoUeditor.models import UEditorField
-from DjangoUeditor.forms import UEditorField
-class TestUEditorForm(forms.Form):
-    content = UEditorField('内容', width=600, height=300, toolbars="full", imagePath="images/", filePath="files/",
-                           upload_settings={"imageMaxSize": 1204000},
-                           settings={})
 # 创建文章，前提是必须已经登录
 @login_required(login_url='/userprofile/login/')
 def article_create(request):
@@ -142,13 +185,10 @@ def article_create(request):
             new_article.author = User.objects.get(id=request.user.id)
             # 将文章保存到数据库
 
-            # TODO get user avatar
+            # get user avatar
             user = request.session.get('user', None)
             user_profile = Profile.objects.get(user = request.user)
             new_article.author_avator = user_profile.avatar
-
-            # TODO test upload picture
-
 
             new_article.save()
             # 返回文章列表
@@ -156,26 +196,14 @@ def article_create(request):
         else:
             messages.error(request, "表单内容有误，请重新填写！")
             return render(request, 'article/create.html')
-            # article_post_form = ArticlePostForm()
-            # context = {'article_post_form': article_post_form}
-            # return HttpResponse("表单内容有误，请重新填写！")
 
     else:
-        # 创建表单类实例
-        
-        # # 赋值上下文
-        # context = {'article_post_form': article_post_from}
-        # # 返回模板
-        # return render(request, 'article/create.html',context)
-
-        # article_post_from = TestUEditorForm()
         article_post_from = ArticlePostForm()
         return render(request, 'article/create.html', {'form': article_post_from})
 
 # 删除文章，前提是必须已经登录
 @login_required(login_url='/userprofile/login/')
 def article_delete(request, id):
-
     # 记住来源的url，如果没有则设置为首页('/')
     # request.session['last_page'] = request.META.get('HTTP_REFERER', '/')
     user = request.session.get('_auth_user_id')
@@ -206,19 +234,12 @@ def article_update(request,id):
     article = ArticlePost.objects.get(id=id)
     #print(user,article.author_id)
     if request.user != article.author:
-    # if str(article.author_id) != str(user):
         messages.error(request, "你没有权限修改此文章")
         article_post_form = ArticlePostForm()
         context = {'article': article, 'article_post_form': article_post_form}
         return render(request, 'article/detail.html', context)
 
     if request.method == "POST":
-        # if str(article.author_id) != str(user):
-        #     messages.error(request, "你没有权限修改此文章")
-        #     article_post_form = ArticlePostForm()
-        #     context = {'article': article, 'article_post_form': article_post_form}
-        #     return render(request, 'article/detail.html', context)
-        #     #return HttpResponse("你没有权限修改此文章")
         article_post_form = ArticlePostForm(data=request.POST)
         if article_post_form.is_valid():
             article.title = request.POST['title']
@@ -235,5 +256,3 @@ def article_update(request,id):
         article_post_form = ArticlePostForm()
         context = {'article': article, 'article_post_form': article_post_form}
         return render(request, 'article/update.html', context)
-# def return_to_list(request):
-#     return redirect("article:article_list")
