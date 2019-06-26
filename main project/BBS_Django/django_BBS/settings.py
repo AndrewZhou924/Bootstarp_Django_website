@@ -30,6 +30,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = 'ku$ou^gwagg1t-gemc@dkvc6q%ap=)1_h^bxg9v()wv=&=n*f$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# TODO 上线时设为false
 DEBUG = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
