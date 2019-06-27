@@ -1,15 +1,20 @@
-#需要安装的第三方库
-    django2.2.1
-    markdown
-    Pygments
-    -U django-password-reset
-    Pillow
-#python版本
-    3.7.3
-#mysql版本
-    5.7   
-##运行方式
-## 使用说明
+### 需要安装的第三方库
+
+- django2.2.1
+- markdown
+- Pygments
+- -U django-password-reset
+- Pillow
+
+python版本
+
+- 3.7.3
+
+mysql版本
+
+- 5.7  
+
+### 使用说明
 确认你的电脑已经正确安装` Python 3 `以上的版本。
 
 下载项目后，在命令行中进入项目目录，并创建**虚拟环境**：
