@@ -11,8 +11,12 @@ import os
 BASE_DIR   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/avatar/')
 def upload_to(instance, fielname):
-    path = '/'.join([MEDIA_ROOT, instance.user.username])
-    os.remove(path) # 清除原来的头像图片
+    path = '/'.join(['avatar', instance.user.username])
+    path +='/'
+
+    # 清除原来的头像图片
+    remove_path = '/'.join([MEDIA_ROOT, instance.user.username])
+    os.remove(remove_path) 
     return path
 
 # 用户扩展信息
@@ -23,6 +27,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=20, blank=True)
     # 头像
     avatar = models.ImageField(upload_to=upload_to, blank=True)
+#     avatar = models.ImageField(upload_to='avatar/%Y%m%d/', blank=True)
     # 个人简介
     bio = models.TextField(max_length=500, blank=True)
     # 大学信息
