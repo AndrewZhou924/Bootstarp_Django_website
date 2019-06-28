@@ -31,9 +31,10 @@ class ArticlePost(models.Model):
     likes  = models.PositiveIntegerField(default=0)
 
     # 新的属性
+    author_avatar = models.ImageField(default='')
     catagory = models.CharField(max_length=100,default='')
     content_img = models.ImageField(upload_to=upload_to,default='')
-    author_avatar = models.ImageField(default='')
+    brief = models.CharField(max_length=500,default='')
 
     class Meta:
         ordering = ('-created',)

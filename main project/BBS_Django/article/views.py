@@ -15,6 +15,68 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from comment.models import Comment
 from userprofile.models import Profile
+import re
+
+# 用于剔除html标签，从富文本中提取纯文本
+def replaceCharEntity(htmlstr):
+  CHAR_ENTITIES={'nbsp':' ','160':' ',
+        'lt':'<','60':'<',
+        'gt':'>','62':'>',
+        'amp':'&','38':'&',
+        'quot':'"','34':'"',}
+    
+  re_charEntity=re.compile(r'&#?(?P<name>\w+);')
+  sz=re_charEntity.search(htmlstr)
+  while sz:
+    entity=sz.group()#entity全称，如>
+    key=sz.group('name')#去除&;后entity,如>为gt
+    try:
+      htmlstr=re_charEntity.sub(CHAR_ENTITIES[key],htmlstr,1)
+      sz=re_charEntity.search(htmlstr)
+    except KeyError:
+      #以空串代替
+      htmlstr=re_charEntity.sub('',htmlstr,1)
+      sz=re_charEntity.search(htmlstr)
+  return htmlstr
+
+# 用于剔除html标签，从富文本中提取纯文本
+def filter_tag(htmlstr):  
+    re_cdata = re.compile('<!DOCTYPE HTML PUBLIC[^>]*>', re.I)  
+    re_script = re.compile('<\s*script[^>]*>[^<]*<\s*/\s*script\s*>', re.I) #过滤脚本  
+    re_style = re.compile('<\s*style[^>]*>[^<]*<\s*/\s*style\s*>', re.I) #过滤style  
+    re_br = re.compile('<br\s*?/?>')  
+    re_h = re.compile('</?\w+[^>]*>')  
+    re_comment = re.compile('<!--[\s\S]*-->') 
+
+    s = re_cdata.sub('', htmlstr)  
+    s = re_script.sub('', s)  
+    s=re_style.sub('',s)  
+    s=re_br.sub('\n',s)  
+    s=re_h.sub(' ',s)  
+    s=re_comment.sub('',s)  
+    blank_line=re.compile('\n+')  
+    s=blank_line.sub('\n',s)  
+    s=re.sub('\s+',' ',s)  
+    s=replaceCharEntity(s)  
+
+    if len(s) > 100:
+        return s[:100]
+    else:
+        return s  
+
+# 从富文本中获取第一张图片的url
+def getFirstImageUrl(string):
+  if "img src=" in string:
+      candidate_str = string.split("img src=")[1]
+      img_url = ""
+      for char in candidate_str[1:]:
+        if char == '"':
+          break
+        else:
+          img_url += char
+      return img_url
+  else:
+      return None
 
 # TODO test this function
 # 下拉加载更多
@@ -48,7 +110,6 @@ def article_list_getMore(search, order, bias, user_id):
 
     # 目前设置每一页有3篇文章
     pagintor = Paginator(article_list,3)
-    # 页码内容反个 articles
     articles = pagintor.get_page(bias)
     context = {'articles':articles, 'order':order,}
 
@@ -94,7 +155,7 @@ def article_list(request):
             article_list = ArticlePost.objects.all()
 
     # 目前设置每一页有3篇文章
-    pagintor = Paginator(article_list,3)
+    pagintor = Paginator(article_list,8)
     # 获取页码
     page = request.GET.get('page')
     # 页码内容反个 articles
@@ -189,6 +250,8 @@ def article_create(request):
             user = request.session.get('user', None)
             user_profile = Profile.objects.get(user = request.user)
             new_article.author_avator = user_profile.avatar
+            new_article.brief = filter_tag(new_article.body)
+            new_article.content_img = getFirstImageUrl(new_article.body)
 
             new_article.save()
             # 返回文章列表
@@ -244,6 +307,8 @@ def article_update(request,id):
         if article_post_form.is_valid():
             article.title = request.POST['title']
             article.body = request.POST['body']
+            article.brief = filter_tag(article.body)
+            article.content_img = getFirstImageUrl(article.body)
             article.save()
             return redirect("article:article_detail",id=id)
         else:
