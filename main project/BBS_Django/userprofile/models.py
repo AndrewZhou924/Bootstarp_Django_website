@@ -9,7 +9,7 @@ import os
 # 设置头像的上传路径，以免发生文件命名冲突
 # 每个用户的头像文件命名为 [username].jpg
 BASE_DIR   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/avatar/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/avatar')
 def upload_to(instance, fielname):
     path = '/'.join(['avatar', instance.user.username])
     path +='/'

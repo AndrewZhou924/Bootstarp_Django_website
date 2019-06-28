@@ -5,7 +5,6 @@ modify structure
 
 bug fix
 - comment显示第一行总有一个多的空格 【小bug】
-- 个人信息编辑模块头像不能显示 【本地有文件，前端无法正常显示，中等bug】
 
 add functions
 - 首页显示markdown编辑后的文章概要 【次要】
