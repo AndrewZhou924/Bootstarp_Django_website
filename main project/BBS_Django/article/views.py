@@ -121,6 +121,7 @@ def article_list_getMore(search, order, bias, user_id):
 def article_list(request):
     search  = request.GET.get('search')
     order = request.GET.get('order')
+    catagory = request.GET.get('catagory')
 
     # 下拉加载更多
     bias = request.GET.get('bias')
@@ -134,8 +135,16 @@ def article_list(request):
     if likes and article_id:
         article_addLikes(article_id)
 
+    # 按种类搜索    
+    if catagory:
+        article_list = ArticlePost.objects.filter(
+                Q(title__icontains=search)|
+                Q(body__icontains=search)|
+                Q(catagory=catagory)
+            )
+
     # 如果是搜索模式
-    if search:
+    elif search:
         # 排序方式是“最热”
         if order == 'total_views':
             article_list = ArticlePost.objects.filter(
@@ -155,7 +164,7 @@ def article_list(request):
             article_list = ArticlePost.objects.all()
 
     # 目前设置每一页有3篇文章
-    pagintor = Paginator(article_list,8)
+    pagintor = Paginator(article_list,9)
     # 获取页码
     page = request.GET.get('page')
     # 页码内容反个 articles
