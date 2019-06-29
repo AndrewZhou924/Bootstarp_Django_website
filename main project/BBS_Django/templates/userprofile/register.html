@@ -38,11 +38,12 @@
                 </div>
 
                 
-                {% comment %} <div class="form-group">
-                    {{ register_form.captcha.errors }}
-                    {{ register_form.captcha.label_tag }}
-                    {{ register_form.captcha }}
-                </div> {% endcomment %}
+                 
+                <div class="form-group">
+                    {{ user_register_form.captcha.errors }}
+                    {{ user_register_form.captcha.label_tag }}
+                    {{ user_register_form.captcha }}
+                </div> 
 
               <button type="reset" class="btn btn-default pull-left">重置</button>
               <button type="submit" class="btn btn-primary pull-right">提交</button>

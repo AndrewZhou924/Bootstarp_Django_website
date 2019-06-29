@@ -1,0 +1,105 @@
+.input-text{  
+    background-color: #3b3b3b;
+    border-color:#e2e2e2;   
+    border-style:solid;   
+    border-top-width:0px;   
+    border-right-width:0px;   
+    border-bottom-width:1px;   
+    border-left-width:0px;
+    border-radius: 0%;
+    color: white;
+  }
+  
+  .input-text::-webkit-input-placeholder{
+      color:#e4e4e4;
+  }
+  .input-text::-moz-placeholder{
+      color:#e4e4e4;
+  }
+  .input-text-ms-input-placeholder{
+      color:#e4e4e4;
+  }
+  
+  .form-control,.myreset{
+      border-color:#e4e4e4;   
+      border-style:solid;   
+      border-top-width:0px;
+      border-right-width:0px;   
+      border-bottom-width:1px;   
+      border-left-width:0px;
+      background-color: #3b3b3b;
+      outline: 0;
+      -webkit-box-shadow: none;
+      box-shadow:none;
+      border-radius : 0%;
+  }
+  
+  .myreset:hover{
+      border-color:#ffffff;   
+      border-style:solid;   
+      border-top-width:0px;
+      border-right-width:0px;   
+      border-bottom-width:1px;   
+      border-left-width:0px;
+      background-color: #3b3b3b;
+      outline: 0;
+      -webkit-box-shadow: none;
+      box-shadow:none;
+      border-radius : 0%;
+      color:#c7c7c7;
+  }
+  
+  .form-control:focus,.myreset:focus{
+      border-color:#ffffff;   
+      border-style:solid;   
+      border-top-width:0px;
+      border-right-width:0px;   
+      border-bottom-width:2px;   
+      border-left-width:0px;
+      background-color: #3b3b3b;
+      outline: 0;
+      -webkit-box-shadow: none;
+      box-shadow:none;
+      border-radius : 0%;
+  }
+  
+  
+  .mysign{
+      background: #3b3b3b;
+      border-style:solid;   
+      border-top-width:0px;
+      border-right-width:0px;   
+      border-bottom-width:0px;   
+      border-left-width:0px;
+      color:white;
+  }
+  
+  #mybutton{
+      background-color: #52e098 ;
+      color: white;
+      width:100%;
+      font-size: 120%;
+      -webkit-box-shadow: none;
+      box-shadow:none;
+  
+  }
+  
+  #mybutton:hover{
+      background-color: #44bd80 ;
+      color: white;
+      width:100%;
+      -webkit-box-shadow: none;
+      box-shadow:none;
+  
+  }
+  
+  #mybutton:focus{
+      background-color: #33af70 ;
+      color: white;
+      width:100%;
+      -webkit-box-shadow: none;
+      box-shadow:none;
+  
+  }
+  
+  
