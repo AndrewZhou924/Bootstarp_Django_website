@@ -55,7 +55,18 @@ def user_logout(request):
 def user_register(request):
     if request.method =='POST':
         user_register_form = UserRegisterForm(data=request.POST)
+        
         if user_register_form.is_valid():
+
+            # 检查两次密码输入是否一致
+            password = user_register_form.cleaned_data['password']
+            password2 = user_register_form.cleaned_data['password2']
+            if password != password2:
+                messages.error(request, "两次输入密码不一致！")
+                user_register_form = UserRegisterForm(data=request.POST)
+                context = {'form': user_register_form}
+                return render(request, 'userprofile/register.html', locals())
+
             new_user = user_register_form.save(commit=False)
             new_user.set_password(user_register_form.cleaned_data['password'])
             new_user.save()
@@ -69,6 +80,7 @@ def user_register(request):
 
     user_register_form = UserRegisterForm
     return render(request, 'userprofile/register.html', locals())
+
 
 
 @login_required(login_url='/userprofile/login/')

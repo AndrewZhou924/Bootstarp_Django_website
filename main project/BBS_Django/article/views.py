@@ -212,7 +212,7 @@ def article_addLikes(id):
 # id是user_id
 def article_detail(request, id):
     article = ArticlePost.objects.get(id=id)
-    comments = Comment.objects.filter(article=id)
+    comments = Comment.objects.filter(article=id).order_by('-created')
     article.total_views += 1
     article.save(update_fields=['total_views'])
 
