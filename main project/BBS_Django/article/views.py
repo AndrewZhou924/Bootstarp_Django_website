@@ -123,24 +123,25 @@ def article_list(request):
     order = request.GET.get('order')
     catagory = request.GET.get('category')
 
-    # 下拉加载更多
-    bias = request.GET.get('bias')
-    if bias and (bias>0):
-            result = article_list_getMore(search, order, bias, user_id=-1)
-            return result
+    # # 下拉加载更多
+    # bias = request.GET.get('bias')
+    # if bias and (bias>0):
+    #         result = article_list_getMore(search, order, bias, user_id=-1)
+    #         return result
     
-    # 点赞 （增加点赞数）
-    likes = request.GET.get('likes')
-    article_id = request.GET.get('article_id')
-    if likes and article_id:
-        article_addLikes(article_id)
+    # # 点赞 （增加点赞数）
+    # likes = request.GET.get('likes')
+    # article_id = request.GET.get('article_id')
+    # if likes and article_id:
+    #     article_addLikes(article_id)
 
+    if not catagory:
+        if request.session.get('catagory',None):
+            catagory = request.session.get('catagory',None)
     # 按种类搜索    
-    if catagory:
-        print("\n\n\nsearch by category")
-        print(str(catagory))          
+    if catagory and catagory != "全部":         
         article_list = ArticlePost.objects.filter(catagory__contains=str(catagory))
-        print(article_list)
+        request.session['catagory'] = str(catagory)
 
     # 如果是搜索模式
     elif search:
@@ -165,8 +166,7 @@ def article_list(request):
     # 目前设置每一页有3篇文章
     pagintor = Paginator(article_list,9)
     # 获取页码
-    # page = request.GET.get('page')
-    page = 1
+    page = request.GET.get('page')
     
     # 页码内容反个 articles
     articles = pagintor.get_page(page)
