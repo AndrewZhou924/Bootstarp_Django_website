@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Profile
 from django.contrib import messages
+import os
 
 class UserLoginForm(forms.Form):
     # username = forms.CharField()
@@ -17,6 +18,10 @@ class UserRegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email')
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'myfieldclass','placeholder':'用户名'}),
+            'email': forms.TextInput(attrs={'class': 'myfieldclass'}),
+        }
 
     # def clean_password2(self):
     #     data = self.cleaned_data
@@ -25,7 +30,22 @@ class UserRegisterForm(forms.ModelForm):
     #     else:
     #         raise forms.ValidationError("密码输入不一致，请重新输入。")
             
+# # 设置头像的上传路径，以免发生文件命名冲突
+# # 每个用户的头像文件命名为 [username].jpg
+# BASE_DIR   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/avatar')
+# def upload_to(instance, fielname):
+#     path = '/'.join(['avatar', instance.user.username])
+#     path +='/'
+
+#     # 清除原来的头像图片
+#     remove_path = '/'.join([MEDIA_ROOT, instance.user.username])
+#     if os.path.exists(remove_path):
+#         os.remove(remove_path) 
+#     return path
+
 class ProfileFrom(forms.ModelForm):
+
     class Meta:
         model = Profile
         fields = ('phone', 'avatar', 'bio')

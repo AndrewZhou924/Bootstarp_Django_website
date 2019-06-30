@@ -27,6 +27,7 @@ def user_login(request):
                 request.session['user_name'] = user.username
 
                 return redirect("article:article_list")
+                # return render(request, 'article/login.html', locals())
                 # return render(request, 'userprofile/login.html', locals())
             else:
                 messages.error(request, "账号或密码有误！")

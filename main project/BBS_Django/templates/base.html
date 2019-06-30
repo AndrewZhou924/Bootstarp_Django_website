@@ -50,12 +50,13 @@
                             <li class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ user.username }} &nbsp;&nbsp;
-                                    {% if not profile.avatar %}
+                                     <img src="/media/avatar/{{user.username}}" style="max-width: 30px; border-radius: 50%;" class="small">
+                                    {% comment %} {% if not profile.avatar %}
                                     <img src="/media/avatar/default.jpg" style="max-width: 30px; border-radius: 50%;" class="small">
                         
                                     {% else %}
                                     <img src="{{ profile.avatar.url }}" style="max-width: 30px; border-radius: 50%;" class="small">
-                                    {%endif%}
+                                    {%endif%} {% endcomment %}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href='{% url "userprofile:edit" user.id %}'>个人信息</a>
