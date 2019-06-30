@@ -51,7 +51,8 @@
                                 <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ user.username }} &nbsp;&nbsp;
                                      <img src="/media/avatar/{{user.username}}" style="max-width: 30px; border-radius: 50%;" class="small">
-                                    {% comment %} {% if not profile.avatar %}
+                                    {% comment %} 
+                                    {% if not profile.avatar %}
                                     <img src="/media/avatar/default.jpg" style="max-width: 30px; border-radius: 50%;" class="small">
                         
                                     {% else %}

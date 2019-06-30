@@ -16,8 +16,7 @@ def upload_to(instance, fielname):
 
     # 清除原来的头像图片
     remove_path = '/'.join([MEDIA_ROOT, instance.user.username])
-    if os.path.exists(remove_path):
-        os.remove(remove_path) 
+    os.remove(remove_path) 
     return path
 
 # 用户扩展信息

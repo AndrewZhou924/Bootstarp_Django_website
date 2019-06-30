@@ -13,14 +13,25 @@ class UserLoginForm(forms.Form):
 # 注册用户表单
 class UserRegisterForm(forms.ModelForm):
     # 复写 User 的密码
-    password = forms.CharField()
-    password2 = forms.CharField()
+    password = forms.CharField(label="fas fa-lock", max_length=30, widget=forms.PasswordInput(attrs={'class': 'text-white form-control input-text', 'placeholder':'设置密码，不多于30字'}))
+    password2 = forms.CharField(label="fas fa-lock", max_length=30, widget=forms.PasswordInput(attrs={'class': 'text-white form-control input-text', 'placeholder':'确认密码'}))
     class Meta:
         model = User
         fields = ('username', 'email')
+
+        labels = {
+            'username': "fas fa-user",
+            'email': "fas fa-envelope"
+        }
+
+        max_lengths ={
+            'username': 30,
+            'email': 50
+        }
+
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'myfieldclass','placeholder':'用户名'}),
-            'email': forms.TextInput(attrs={'class': 'myfieldclass'}),
+            'username': forms.TextInput(attrs={'class': 'text-white form-control input-text','placeholder':'设置用户名，不多于30字'}),
+            'email': forms.TextInput(attrs={'class': 'text-white form-control input-text','placeholder':'设置安全邮箱'})
         }
 
     # def clean_password2(self):

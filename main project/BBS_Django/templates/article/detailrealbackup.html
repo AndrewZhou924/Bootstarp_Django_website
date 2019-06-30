@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %} 
+LemonForum-{{ article.title }}
+{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'mycss/detail.css' %}">
+
+{% endblock css%}
+
+{% block content %}
+<div class="container">
+{% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+{% endif %}
+
+<div class="d-flex justify-content-center">
+    <div class="articleblock px-5 py-5">
+        <div>
+            
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+
+
+
+
+
