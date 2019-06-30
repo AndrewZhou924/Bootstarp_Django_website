@@ -244,11 +244,11 @@ def article_create(request):
     # 判断用户是否提交空数据
     if request.method == "POST":
         # 将提交的数据复制到表单
-        article_post_from = ArticlePostForm(data=request.POST)
+        article_post_form = ArticlePostForm(data=request.POST)
         # 判断提交的数据是否满足模型要求
-        if article_post_from.is_valid():
+        if article_post_form.is_valid():
             # 保存数据但不提交到数据库
-            new_article = article_post_from.save(commit=False)
+            new_article = article_post_form.save(commit=False)
             # 指定数据库中 id 为1的用户为作者
             # 如果你进行过删除数据表的操作，可能会找不到id=1的用户
             # 此时请重新创建用户，并传入此用户的id
@@ -258,6 +258,8 @@ def article_create(request):
             # get user avatar
             user = request.session.get('user', None)
             user_profile = Profile.objects.get(user = request.user)
+
+            new_article.title = article_post_form.cleaned_data['title']
             new_article.author_avator = user_profile.avatar
             new_article.brief = filter_tag(new_article.body)
             new_article.content_img = getFirstImageUrl(new_article.body)
@@ -270,8 +272,8 @@ def article_create(request):
             return render(request, 'article/create.html')
 
     else:
-        article_post_from = ArticlePostForm()
-        return render(request, 'article/create.html', {'form': article_post_from})
+        article_post_form = ArticlePostForm()
+        return render(request, 'article/create.html', {'form': article_post_form})
 
 # 删除文章，前提是必须已经登录
 @login_required(login_url='/userprofile/login/')

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑器测试</title>
+    {{ form.media }}
+</head>
+
+<body>
+
+<form method='post'>
+{% csrf_token %}
+{{ form }}
+
+<button type='submit' class='btn btn-primary'>提交</button>
+</form>
+
+
+</body>
+
+</html>

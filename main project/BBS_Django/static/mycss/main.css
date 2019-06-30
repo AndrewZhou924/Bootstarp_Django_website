@@ -1,0 +1,127 @@
+  a{
+    text-decoration: none;
+    color: #111;
+    cursor: pointer;
+  }
+  ol,
+  ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  img{
+    max-width: 100%;
+  }
+  b,
+  strong{
+    font-weight: 600;
+  }
+  hr{
+    background: #111;
+    box-shadow: none;
+    border: none;
+    height: 1px;
+    width: 100%;
+    margin: 10px 0;
+  }
+  ::selection{
+    background: var(--main-bg-color);
+    color: #fff;
+  }
+  ::-moz-selection{
+    background: var(--main-bg-color);
+    color: #fff;
+  }
+  
+  .container{
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 10px;
+  }
+  .wrapper{
+    padding: 10px 0;
+    margin-top:20px;
+  }
+  .card{
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, .1);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow .2s ease-in-out;
+  }
+  .card__picture{
+    display: block;
+    width: 100%;
+    height: auto;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+  .card-infos{
+    padding: 20px;
+    background: #fff;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  .card__title{
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 10px;
+    color: rgb(32, 32, 32)
+  }
+  .card__text{
+    font-size: 1.4rem;
+    font-weight: 300;
+    margin: 0;
+    color: #86888A;
+  }
+  .card__text--high{
+    font-weight: 600;
+  }
+  
+  .sortable__nav{
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    height: 90px;
+    background: linear-gradient(#f6fffa 50%,#f6fffa00 100%); /* 标准的语法（必须放在最后） */
+  }
+  .nav__link{
+    padding: 0 20px 4px;
+    color: #32634a !important;
+    font-size: 1.0rem;
+    font-weight: 300;
+    display: block;
+    border-bottom: 2px solid transparent;
+  }
+  .nav__link.is-active{
+    border-color: var(--main-bg-color);
+  }
+
+  .list__item.item{
+    display: flex;
+  }
+  .item__link.link{
+    margin: 0;
+  }
+  .item__link.link:not(:first-child){
+    margin-left: 20px;
+  }
+  .link__icon{
+    height: 2rem;
+    width: 2rem;
+  }
+
+  .myreadcard{
+    outline:none;
+    text-decoration: none;
+}
+
+.myreadcard:hover{
+  outline:none;
+  text-decoration: none;
+  color:rgb(32, 32, 32);
+}
+  

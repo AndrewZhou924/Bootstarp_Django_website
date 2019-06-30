@@ -1,70 +1,72 @@
 <!-- extends表明此页面继承自 base.html 文件 -->
-{% extends "base.html" %}
+{% extends "base.html"%}
 {% load staticfiles %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'mycss/main.css' %}">
 
+{% endblock css%}
 
 <!-- 写入 base.html 中定义的 title -->
 {% block title %}
     首页
 {% endblock title %}
+{% block childnavbar %}
+<ul class="sortable__nav nav">
+    <li>
+      <a data-sjslink="all" class="nav__link ">
+        全部
+      </a>
+    </li>
+    <li>
+      <a data-sjslink="新闻" class="nav__link">
+        新闻
+      </a>
+    </li>
+    <li>
+        <a data-sjslink="体育" class="nav__link">
+          体育
+        </a>
+    </li>
+</ul>
 
+
+
+{% endblock childnavbar %}
 <!-- 写入 base.html 中定义的 content -->
 {% block content %}
-
-<!-- 定义放置文章标题的div容器 -->
-<div class="sortable">
     <div class="container">
-      <div class="wrapper">
-        <ul class="sortable__nav nav">
-          <li>
-            <a data-sjslink="all" class="nav__link">
-              全部
-            </a>
-          </li>
-          <li>
-            <a data-sjslink="test" class="nav__link">
-              test
-            </a>
-          </li>
-          <!--
-          <li>
-            <a data-sjslink="test" class="nav__link">
-              test
-            </a>
-          </li>
-          -->
-        </ul>
-        
+      <div class="wrapper">        
         <div id="sortable" class="sjs-default">
         {% for article in articles %}
-          <div data-sjsel="test">
-            <div class="card">
-                <!--后期加文章第一个图片-->
-              <img class="card__picture" src="./images/item-1.jpg" alt="">
-              <div class="card-infos">
-                <h4 class="card__title">{{ article.title }}</h4>
-                <!--<p class="card__text" onload = "this.innerHTML = getSimpleText({{ article.body }}) + '...'"  >             
-                </p>-->
-                <p class="card__text " name = "origin">{{article.body}}          
+          <div data-sjsel='{{article.catagory}}'>
+            <a href="{% url 'article:article_detail' article.id %}" class=" myreadcard" >
+              <div class="card">
+              
+                  <img class="card__picture" src='{{article.content_img}}' alt="" >
+                  <div class="card-infos">
+                    <h4 class="card__title">{{ article.title }}</h4>
+                    <!--<p class="card__text" onload = "this.innerHTML = getSimpleText({{ article.body }}) + '...'"  >             
+                    </p>-->
+                    <p class="card__text " name = "origin">
+                      {{article.brief}}          
                     </p>
-
-                <div class="card-footer">
-                    <a href="{% url 'article:article_detail' article.id %}" class="btn btn-primary">阅读本文</a>
+                    <div class="text-right small" style="color: gray;">
                         <span>
-                            <small class="col align-self-end" style="color: gray;">
-                                浏览:{{ article.total_views }}
-                            </small>
+                          <i class="fas fa-fire">
+                          </i>
                         </span>
-                </div>
+                        {{ article.total_views }}
+                    </div>
+                  </div>
               </div>
-            </div>
+          </a>
           </div>
         {% endfor %}
           
         </div>
       </div>
     </div>
-</div>
+
 
 <!-- 页码导航 -->
 <div class="pagination justify-content-center">
