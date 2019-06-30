@@ -6,6 +6,24 @@
 {% endblock title %}
 {% block css %}
 {{ form.media }}
+<link rel="stylesheet" href="{% static 'mycss/articlecreate.css' %}">
+<style>
+.mysign{
+    background: #52e098;
+    color:white;
+    border-radius: 5px;
+}
+
+.articletitle::-webkit-input-placeholder{
+      color:#c8c8c8;
+  }
+  .articletitle::-moz-placeholder{
+      color:#c8c8c8;
+  }
+  .articletitle-ms-input-placeholder{
+      color:#c8c8c8;
+  }
+</style>
 
 {% endblock css%}
 
@@ -20,15 +38,51 @@
 {% endif %}
 
 <div class="d-flex justify-content-center">
-    <div class="articleblock px-5 py-5">
-            <form method='post'>
-                    {% csrf_token %}
-        <div>
-            
+    <div class="createblock px-5 py-5">
+        <form method='post'>
+        {% csrf_token %}
+                    
+        <div class="input-group mb-3">
+            <div class="input-group-text mysign">
+                题目
+            </div>
             {{form.title}}
-            
-            
         </div>
+        <div class="custom-control-inline mb-3">
+                <div class="custom-control custom-checkbox mx-2">
+                        <input type="checkbox" class="custom-control-input" id="学习" value ="学习" name="category"/>
+                        <label for="学习" class="custom-control-label">学习</label>
+                    </div>
+                    <div class="custom-control custom-checkbox mx-2">
+                        <input type="checkbox" class="custom-control-input" id="经验" value ="经验" name="category"/>
+                        <label for="经验" class="custom-control-label">经验</label>
+                    </div>
+                    <div class="custom-control custom-checkbox mx-2">
+                        <input type="checkbox" class="custom-control-input" id="动漫" value ="动漫" name="category" />
+                        <label for="动漫" class="custom-control-label">动漫</label>
+                    </div>
+                    <div class="custom-control custom-checkbox mx-2">
+                        <input type="checkbox" class="custom-control-input" id="游戏" value ="游戏" name="category" />
+                        <label for="游戏" class="custom-control-label">游戏</label>
+                    </div>
+                    <div class="custom-control custom-checkbox mx-2">
+                        <input type="checkbox" class="custom-control-input" id="体育" value ="体育" name="category" />
+                        <label for="体育" class="custom-control-label">体育</label>
+                    </div>
+                    <div class="custom-control custom-checkbox mx-2">
+                        <input type="checkbox" class="custom-control-input" id="吐槽" value ="吐槽" name="category" />
+                        <label for="吐槽" class="custom-control-label">吐槽</label>
+                    </div>
+                    <div class="custom-control custom-checkbox mx-2">
+                        <input type="checkbox" class="custom-control-input" id="趣事" value ="趣事" name="category" />
+                        <label for="趣事" class="custom-control-label">趣事</label>
+                    </div>
+                    <div class="custom-control custom-checkbox mx-2">
+                        <input type="checkbox" class="custom-control-input" id="我酸了" value ="我酸了" name="category" />
+                        <label for="我酸了" class="custom-control-label">我酸了</label>
+                    </div>
+        </div>
+        
         {{form.body}}
         
             <button type='submit' class='btn btn-primary'>提交</button>

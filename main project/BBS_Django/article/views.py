@@ -121,7 +121,7 @@ def article_list_getMore(search, order, bias, user_id):
 def article_list(request):
     search  = request.GET.get('search')
     order = request.GET.get('order')
-    catagory = request.GET.get('catagory')
+    catagory = request.GET.get('category')
 
     # 下拉加载更多
     bias = request.GET.get('bias')
@@ -137,11 +137,10 @@ def article_list(request):
 
     # 按种类搜索    
     if catagory:
-        article_list = ArticlePost.objects.filter(
-                Q(title__icontains=search)|
-                Q(body__icontains=search)|
-                Q(catagory=catagory)
-            )
+        print("\n\n\nsearch by category")
+        print(str(catagory))          
+        article_list = ArticlePost.objects.filter(catagory__contains=str(catagory))
+        print(article_list)
 
     # 如果是搜索模式
     elif search:
@@ -166,7 +165,9 @@ def article_list(request):
     # 目前设置每一页有3篇文章
     pagintor = Paginator(article_list,9)
     # 获取页码
-    page = request.GET.get('page')
+    # page = request.GET.get('page')
+    page = 1
+    
     # 页码内容反个 articles
     articles = pagintor.get_page(page)
 
@@ -243,6 +244,14 @@ def article_detail(request, id):
 def article_create(request):
     # 判断用户是否提交空数据
     if request.method == "POST":
+
+        category = ""
+        check_box_list = request.POST.getlist('category')
+        if check_box_list and len(check_box_list) > 0:
+            for check_box in check_box_list:
+                category += check_box
+                category += " "
+
         # 将提交的数据复制到表单
         article_post_form = ArticlePostForm(data=request.POST)
         # 判断提交的数据是否满足模型要求
@@ -263,6 +272,8 @@ def article_create(request):
             new_article.author_avator = user_profile.avatar
             new_article.brief = filter_tag(new_article.body)
             new_article.content_img = getFirstImageUrl(new_article.body)
+
+            new_article.catagory = category
 
             new_article.save()
             # 返回文章列表

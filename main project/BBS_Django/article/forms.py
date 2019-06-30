@@ -3,7 +3,7 @@ from .models import ArticlePost
 
 
 class ArticlePostForm(forms.ModelForm):
-    title  = forms.CharField(label="fas fa-lock", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control input-text', 'placeholder':'题目'}))
+    title  = forms.CharField( max_length=100, widget=forms.TextInput(attrs={'class': 'form-control articletitle', 'placeholder':'不多于30字'}))
         
     class Meta:
         model = ArticlePost

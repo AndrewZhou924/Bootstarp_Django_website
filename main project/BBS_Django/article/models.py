@@ -18,7 +18,7 @@ class ArticlePost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
 
-    body = UEditorField(width=600, height=300, toolbars="full", imagePath="images/", filePath="files/",
+    body = UEditorField(width=804, height=600, toolbars="full", imagePath="images/", filePath="files/",
                             upload_settings={"imageMaxSize": 4096000,
                             "imagePathFormat":"image/ueditor/%Y%m/%(basename)s_%(datetime)s.%(extname)s"},
                             settings={}, verbose_name='内容')
