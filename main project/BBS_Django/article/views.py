@@ -134,10 +134,18 @@ def article_list(request):
     # article_id = request.GET.get('article_id')
     # if likes and article_id:
     #     article_addLikes(article_id)
-
+        
+    if not request.GET.get('page'):
+        catagory = "全部"
+        request.session['catagory'] = "全部"
+        
+    if catagory == "全部":
+        request.session['catagory'] = "全部"
     if not catagory:
         if request.session.get('catagory',None):
             catagory = request.session.get('catagory',None)
+        else:
+            request.session['catagory'] = "全部"
     # 按种类搜索    
     if catagory and catagory != "全部":         
         article_list = ArticlePost.objects.filter(catagory__contains=str(catagory))
