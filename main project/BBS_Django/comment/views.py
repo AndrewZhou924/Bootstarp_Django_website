@@ -17,6 +17,8 @@ def post_comment(request, article_id):
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.article = article
+            article.total_views -= 1
+            article.save(update_fields=['total_views'])
             new_comment.user = request.user
 
             # 根据user找到Profile，从而拿到头像url
