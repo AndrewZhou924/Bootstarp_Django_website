@@ -6,6 +6,63 @@ LemonForum-{{ article.title }}
 {% endblock title %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'mycss/detail.css' %}">
+<style>
+.mybutton{
+    background-color: #52e098 ;
+    color: white;
+    width:20%;
+    font-size: 120%;
+    -webkit-box-shadow: none;
+    box-shadow:none;
+}
+
+.mybutton:hover{
+    background-color: #44bd80 ;
+    color: white;
+    width:20%;
+    -webkit-box-shadow: none;
+    box-shadow:none;
+
+}
+
+.mybutton:focus{
+    background-color: #33af70 ;
+    color: white;
+    width:20%;
+    
+    -webkit-box-shadow: none;
+    box-shadow:none;
+
+}
+
+textarea.form-control{
+    border-color:#c5c5c5;   
+    border-style:solid;
+    border-top-width:1px;
+    border-right-width:1px;   
+    border-bottom-width:1px;   
+    border-left-width:1px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow:none;
+}
+textarea.form-control:hover,textarea.form-control:focus{
+    border-color:#c5c5c5c9;   
+    border-style:solid;
+    border-top-width:1px;
+    border-right-width:1px;   
+    border-bottom-width:1px;   
+    border-left-width:1px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    outline: 0;
+    -webkit-box-shadow: 0px 1px 1px #21774c80;
+    box-shadow:0px 0px 5px #21774c41; 
+}
+
+</style>
 
 {% endblock css%}
 
@@ -70,56 +127,77 @@ LemonForum-{{ article.title }}
 
     </div>
 </div>
-{% if user.is_authenticated %}
-<div class="d-flex justify-content-center mt-2">
-        <div class="articleblock px-5 py-3">
-            <div class = "d-flex justify-content-between">
-                    <form method="POST" action="{% url 'comment:post_comment' article.id %}">
-                            {% csrf_token %}
-                            <div class="from-group">
-                                <label for="body"></label>
-                                <textarea
-                                type="text"
-                                class="form-control"
-                                id="body"
-                                name="body"
-                                rows="1"></textarea>
-                            </div>
-                            <!--提交-->
-                            <div style="margin-top: 5px"><button type="submit" class="btn btn-primary">发送</button></div>
+
+<div class="d-flex justify-content-center mt-3 ">
+        <div class="articleblock px-5 py-2">
+                <div class="container mt-3">
+                        {% if user.is_authenticated %}
+                        <form method="POST" action="{% url 'comment:post_comment' article.id %}">
                             
-                    </form>
-            </div>
-        </div>
-</div>
+                                {% csrf_token %}
+                                    <div class="form-group form-inline">
+                                        <label for="body"></label>
+                                        <textarea
+                                        type="text"
+                                        class="form-control"
+                                        id="body"
+                                        name="body"
+                                        rows="1"
+                                        style = "resize: none; width: 80%;
+                                        height: 40px;"></textarea>
+                                    
+                                    <!--提交-->
+                                    <button type="submit" class="btn mybutton">评论</button>
+                                    </div>
+                            </form>
+                
+                    
+            
+
 
 {% else %}
-            <br>
-            <h5 class="row justify-content-center">
-                请<a href="{% url 'userprofile:login' %}">登录</a>后回复
-            </h5>
-        {% endif %}
-        <!--显示评论-->
-        <div>
-            {% for comment in comments %}
-                <hr>
-                <p>
-                    <img src="{{comment.user_avatar.url}}" style="max-width: 30px; border-radius: 50%;" class="small">
+            <div class="row justify-content-between mb-3 mx-1" style="color:#a8a8a8">
+                <div>
+                    想评论？<a style="color:#3b3b3b" href="{% url 'userprofile:login' %}">点此登录</a>
+                </div>
+                <div>
+                    没有账号？<a style="color:#3b3b3b" href="{% url 'userprofile:register' %}">点此注册</a>
+                </div>
+                
+            </div>
 
-                    <strong style="color: pink">
+{% endif %}
+        <!--显示评论-->
+        {% for comment in comments %}
+        <div class="d-flex justify-content-between">
+            
+                <div>
+                    <img src="{{comment.user_avatar.url}}" style="width: 30px;height:30px; border-radius: 50%;" class="small">
+
+                    <span class="ml-3" style="color:gray ;font-size: 1em">
                         {{ comment.user }}
-                    </strong>
-                    <span style="color: greenyellow;">
-                        {{ comment.created|date:"Y-m-d H:i:s" }}
-                    </span>时说：
-                </p>
-                <pre style="font-family: inherit; font-size: 1em">
-                {{ comment.body }}
-                </pre>
-            {% endfor %}
+                    </span>
+                
+                    <span class="ml-3" style="color:#3b3b3b; font-family: inherit; font-size: 1em">
+                        {{ comment.body }}
+                    </span>
+                </div>
+                <div class="mt-1" style="color:gray;font-family: inherit; font-size: 1em">
+                    {{ comment.created|date:"m-d   H:i" }}
+                </div>
+                
+            
         </div>
+        <hr>
+        {% endfor %}
     </div>
     </div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="mb-5">
 </div>
 
 <script>
