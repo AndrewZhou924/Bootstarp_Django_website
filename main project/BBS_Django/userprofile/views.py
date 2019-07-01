@@ -73,7 +73,13 @@ def user_register(request):
             login(request, new_user)
             return redirect("article:article_list")
         else:
-            messages.error(request, "您的输入有误，请重新输入")
+            username = request.POST.get('username')
+            same_name_user = User.objects.filter(username=username)
+            if same_name_user:  # 用户名唯一
+                messages.error(request, '用户已经存在，请重新选择用户名！')
+            else:
+                messages.error(request, "您的输入有误，请重新输入")
+            
             user_register_form = UserRegisterForm(data=request.POST)
             context = {'form': user_register_form}
             return render(request, 'userprofile/register.html', locals())
