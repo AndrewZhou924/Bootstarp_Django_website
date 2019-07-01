@@ -76,6 +76,8 @@
             {% for comment in comments %}
                 <hr>
                 <p>
+                    <img src="{{comment.user_avatar.url}}" style="max-width: 30px; border-radius: 50%;" class="small">
+
                     <strong style="color: pink">
                         {{ comment.user }}
                     </strong>

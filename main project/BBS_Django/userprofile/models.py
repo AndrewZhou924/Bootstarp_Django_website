@@ -16,8 +16,7 @@ def upload_to(instance, fielname):
 
     # 清除原来的头像图片
     remove_path = '/'.join([MEDIA_ROOT, instance.user.username])
-    if os.path.exists(remove_path):
-        os.remove(remove_path) 
+    os.remove(remove_path) 
     return path
 
 # 用户扩展信息
@@ -27,7 +26,7 @@ class Profile(models.Model):
     # 电话号码字段
     phone = models.CharField(max_length=20, blank=True)
     # 头像
-    avatar = models.ImageField(upload_to=upload_to, default='avatar/default.jpg')
+    avatar = models.ImageField(upload_to=upload_to, blank=True)
 #     avatar = models.ImageField(upload_to='avatar/%Y%m%d/', blank=True)
     # 个人简介
     bio = models.TextField(max_length=500, blank=True)

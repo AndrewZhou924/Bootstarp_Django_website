@@ -38,7 +38,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ALLOWED_HOSTS = ['2459zf9467.wicp.vip',
                  '127.0.0.1',
                  'localhost',
-                 '47.102.131.65',
+                 '47.102.131.85',
                  ]
 
 
